@@ -1,6 +1,6 @@
 <template>
   <img v-if="theWheel" id="prizePointer" src="../assets/red_triangle.png" />
-  <canvas  id="canvas" data-responsiveMargin="5" style="background-image: url('../assets/basic_wheel_background2.png')" width="600" height="600"  data-responsiveMinWidth="180" data-responsiveScaleHeight="true">
+  <canvas  id="canvas" data-responsiveMargin="75" style="background-image: url('../assets/basic_wheel_background2.png')" width="500" height="500"  data-responsiveMinWidth="180" data-responsiveScaleHeight="true">
     Canvas not supported, use another browser.
   </canvas>
   <button v-if="theWheel" @click="spinWheel" class="btn btn-success mt-2">
@@ -101,7 +101,7 @@ export default {
 
 <style scoped>
 #prizePointer {
-    width:50px;
+    width:3em;
     z-index: 999;
     margin-top:10px;
   /* position: absolute;
