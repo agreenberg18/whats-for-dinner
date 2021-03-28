@@ -1,5 +1,6 @@
 <template>
   <div class="container justify-content-center">
+    <vue-spinner />
     <form @submit.prevent="onSubmit">
       <div class="row justify-content-center">
         <label class="form-label" for="location">Location: </label>
@@ -11,11 +12,14 @@
         />
       </div>
       <div class="row mt-3 justify-content-center">
-        <button class="btn btn-primary" type="submit">Generate Wheel</button>
+        <button class="btn btn-primary" type="submit">Get Restaurants</button>
       </div>
     </form>
     <div class="row justify-content-center">
-      <Winner :showModal="showModal" @modalReset="modalReset"/>
+      <div v-if="loadingStatus" class="spinner-border text-primary mt-4" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <Winner :showModal="showModal" @modalReset="modalReset" />
       <Wheel @winnerSelected="winnerSelected(data)" />
     </div>
   </div>
@@ -28,37 +32,38 @@ import Winner from "@/components/Winner.vue";
 import { mapGetters } from "vuex";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: { Wheel, Winner },
-  computed: {},
   data() {
     return {
-      location: '',
+      location: "",
       wheelDisplay: false,
       showModal: false,
-
     };
   },
-  mounted() {
+  mounted() {},
+  computed:{
+    loadingStatus(){
+      return this.$store.getters.loadingStatus
+    }
   },
   methods: {
-    onSubmit(){
-      this.$store.dispatch('getRestaurants', this.location)
+    onSubmit() {
+      this.$store.dispatch("getRestaurants", this.location);
     },
-    winnerSelected(){
-      console.log("in home, propagating to winner")
-      this.showModal = true
+    winnerSelected() {
+      console.log("in home, propagating to winner");
+      this.showModal = true;
     },
-    modalReset(){
-      this.showModal = false
-    }
+    modalReset() {
+      this.showModal = false;
+    },
   },
 };
 </script>
 
 <style scoped>
-#redArrow{
-  width:5em;
-  
+#redArrow {
+  width: 5em;
 }
 </style>

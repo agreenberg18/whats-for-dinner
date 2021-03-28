@@ -4,32 +4,36 @@ export default createStore({
   state: {
     data: {},
     restaurants: [],
-    website:{},
+    website: {},
     dataReceived: 0,
-    winner:{}
+    winner: {},
+    loadingStatus: false
   },
   mutations: {
-    resetData(state){
+    resetData(state) {
       state.data = {}
       state.restaurants = []
-      state.website ={}
+      state.website = {}
       state.winner = {}
       state.dataReceived = 0
+    },
+    loadingStatus(state, newLoadingStatus){
+      state.loadingStatus = newLoadingStatus
     },
 
     getData(state, data) {
       //console.log(data)
       state.data = data
       for (var i = 0; i < data.businesses.length; i++) {
-        if (i==data.businesses.length -1){
+        if (i == data.businesses.length - 1) {
           state.dataReceived = 1
         }
         state.restaurants.push(data.businesses[i].name)
         state.website[data.businesses[i].name] = data.businesses[i].url
       }
-      console.log(state.dataReceived)
+      state.loadingStatus = false
     },
-    setWinner(state,theWinner){
+    setWinner(state, theWinner) {
       state.winner = theWinner
     }
   },
@@ -41,13 +45,17 @@ export default createStore({
         redirect: 'follow'
       };
 
-      fetch("https://spinner-middleware.herokuapp.com/getRestaurants?location=" +location, requestOptions)
-        .then(response => response.json())
+      fetch("https://spinner-middleware.herokuapp.com/getRestaurants?location=" + location, requestOptions)
+      .then(context.commit('loadingStatus', true))  
+      .then(response => response.json())
         //.then(data => console.log(data))
-        .then(data => context.commit('getData', data))
+        .then(data => {
+          context.commit('getData', data)
+        })
+        .catch(e =>console.log(e))
 
     },
-    setWinner(context, theWinner){
+    setWinner(context, theWinner) {
       console.log(theWinner)
       context.commit('setWinner', theWinner)
     }
@@ -61,11 +69,14 @@ export default createStore({
       //console.log(state.restaurants)
       return state.website
     },
-    getWinner: (state) =>{
+    getWinner: (state) => {
       return state.winner
     },
-    dataReceived: (state) =>{
+    dataReceived: (state) => {
       return state.dataReceived
+    },
+    loadingStatus: (state) => {
+      return state.loadingStatus
     }
   }
 })
