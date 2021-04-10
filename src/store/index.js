@@ -15,9 +15,10 @@ export default createStore({
       state.restaurants = []
       state.website = {}
       state.winner = {}
+      state.stars = []
       state.dataReceived = 0
     },
-    loadingStatus(state, newLoadingStatus){
+    loadingStatus(state, newLoadingStatus) {
       state.loadingStatus = newLoadingStatus
     },
 
@@ -28,31 +29,44 @@ export default createStore({
         if (i == data.businesses.length - 1) {
           state.dataReceived = 1
         }
+        if (state['stars'].includes(data.businesses[i].rating.toString()) === true){
         state.restaurants.push(data.businesses[i].name)
         state.website[data.businesses[i].name] = data.businesses[i].url
+        }
       }
       state.loadingStatus = false
+    },
+    setStars(state, stars){
+      state.stars = stars.split(',')
+      console.log(state.stars)
     },
     setWinner(state, theWinner) {
       state.winner = theWinner
     }
   },
   actions: {
-    getRestaurants(context, location) {
+    getRestaurants(context, yelpParams) {
+      var meters = parseInt(yelpParams['range']) * 1609
+      var stars = yelpParams.stars
       context.commit('resetData')
       var requestOptions = {
         method: 'GET',
         redirect: 'follow'
       };
-
-      fetch("https://spinner-middleware.herokuapp.com/getRestaurants?location=" + location, requestOptions)
-      .then(context.commit('loadingStatus', true))  
-      .then(response => response.json())
+      var params = ""
+      var params = "location=" + yelpParams['location'] + "&" + "price=" + yelpParams['price'] + "&open_now=" + yelpParams['openOnly'] + "&radius=" + meters + "&limit=50&sort_by=rating" 
+      
+      fetch("https://dinnerspinner.io/testing/getRestaurants?" + params, requestOptions)
+        .then(context.commit('loadingStatus', true))
+        .then(response => response.json())
         //.then(data => console.log(data))
         .then(data => {
+          console.log(data)
+          console.log('stars in actions, ', stars)
+          context.commit('setStars', stars)
           context.commit('getData', data)
         })
-        .catch(e =>console.log(e))
+        .catch(e => console.log(e))
 
     },
     setWinner(context, theWinner) {

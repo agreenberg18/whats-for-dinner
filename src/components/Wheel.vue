@@ -53,37 +53,7 @@ export default {
       },
       deep: true,
     },
-    // restaurants: {
-    //   handler: function () {
-    //     this.options = [];
-    //     if (this.dataReceived == 1) {
-    //         this.restLength = this.restaurants.length > 15 ? 15 : this.restaurants.length
-    //       for (var i = 0; i < this.restLength; i++) {
-    //         var firstWord = this.restaurants[i].substring(0, 20);
-    //         var color = "";
-    //         if (i % 4 == 0) {
-    //           color = "#0d6efd";
-    //         } else if (i % 3 == 0) {
-    //           color = "#6f42c1";
-    //         } else if (i % 2 == 0) {
-    //           color = "#198754";
-    //         } else {
-    //           color = "#ffc107";
-    //         }
-    //         this.options.push({
-    //           //textFillStyle: color,
-    //           fillStyle: color,
-    //           text: firstWord,
-    //           fullName: this.restaurants[i],
-    //           URL: this.restaurantUrls[this.restaurants[i]],
-    //         });
-    //       }
-    //     }
-    //     // console.log(this.restaurantUrls)
-    //     this.generateWheel();
-    //   },
-    //   deep: true,
-    // },
+    
   },
   mounted() {},
   data() {
